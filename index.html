@@ -64,35 +64,6 @@
             border-radius: 20px;
             backdrop-filter: blur(10px);
         }
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-        .nav-button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-        .nav-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        .nav-button.active {
-            background: linear-gradient(45deg, #4caf50, #45a049);
-        }
-        .nav-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
         .section {
             background: rgba(255,255,255,0.1);
             border-radius: 15px;
@@ -310,14 +281,6 @@
                 <span id="displayUsername">Player</span>
                 <button class="auth-button logout" onclick="logout()">🚪 Logout</button>
             </div>
-            
-            <div class="nav-buttons">
-                <button class="nav-button active" onclick="showSection('home')">🏠 Home</button>
-                <button class="nav-button" onclick="showSection('lobby')" id="lobbyBtn" disabled>🏠 Game Lobby</button>
-                <button class="nav-button" onclick="showSection('game')" id="gameBtn" disabled>🎮 Play Game</button>
-                <button class="nav-button" onclick="showSection('leaderboard')">🏆 Leaderboard</button>
-                <button class="nav-button" onclick="showSection('profile')" id="profileBtn" disabled>👤 Profile</button>
-            </div>
         </div>
 
         <!-- Home Section -->
@@ -335,6 +298,11 @@
             <div id="userContent" style="display: none;">
                 <h3>🎮 Welcome back, <span id="welcomeUser">Player</span>!</h3>
                 <p>Ready to dominate the leaderboards?</p>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button class="game-button" onclick="showSection('lobby')">🏠 Game Lobby</button>
+                    <button class="game-button" onclick="showSection('leaderboard')">🏆 Leaderboard</button>
+                    <button class="game-button" onclick="showSection('profile')">👤 Profile</button>
+                </div>
             </div>
             
             <h3>🎯 Platform Features</h3>
@@ -365,6 +333,9 @@
                 <p style="text-align: center; margin-top: 1rem;">
                     Don't have an account? <a href="#" onclick="showSection('register')" style="color: #ff6b6b;">Register here</a>
                 </p>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button class="game-button" onclick="showSection('home')">🏠 Back to Home</button>
+                </div>
             </div>
         </div>
 
@@ -392,6 +363,9 @@
                 <p style="text-align: center; margin-top: 1rem;">
                     Already have an account? <a href="#" onclick="showSection('login')" style="color: #ff6b6b;">Login here</a>
                 </p>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button class="game-button" onclick="showSection('home')">🏠 Back to Home</button>
+                </div>
             </div>
         </div>
 
@@ -425,6 +399,7 @@
                 <div style="text-align: center; margin-top: 2rem;">
                     <button class="game-button" onclick="showSection('lobby')">🎮 Play Now</button>
                     <button class="game-button" onclick="showSection('leaderboard')">🏆 View Rankings</button>
+                    <button class="game-button" onclick="showSection('home')">🏠 Back to Home</button>
                 </div>
             </div>
         </div>
@@ -455,6 +430,7 @@
             
             <div style="text-align: center; margin: 2rem 0;">
                 <button class="game-button pulse" onclick="createRoom()">🆕 Create New Room</button>
+                <button class="game-button" onclick="showSection('home')">🏠 Back to Home</button>
             </div>
         </div>
 
@@ -587,6 +563,10 @@
                     </tr>
                 </tbody>
             </table>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="game-button" onclick="showSection('home')">🏠 Back to Home</button>
+            </div>
         </div>
     </div>
 
@@ -608,18 +588,8 @@
                 section.classList.remove('active');
             });
             
-            // Remove active class from all buttons
-            document.querySelectorAll('.nav-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            
             // Show selected section
             document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked button
-            if (event && event.target.classList.contains('nav-button')) {
-                event.target.classList.add('active');
-            }
         }
 
         // Authentication functions
@@ -721,11 +691,6 @@
                 document.getElementById('displayUsername').textContent = currentUser.username;
                 document.getElementById('welcomeUser').textContent = currentUser.username;
                 
-                // Enable navigation buttons
-                document.getElementById('lobbyBtn').disabled = false;
-                document.getElementById('gameBtn').disabled = false;
-                document.getElementById('profileBtn').disabled = false;
-                
                 // Update profile
                 updateProfile();
             } else {
@@ -733,11 +698,6 @@
                 userInfo.style.display = 'none';
                 guestContent.style.display = 'block';
                 userContent.style.display = 'none';
-                
-                // Disable navigation buttons
-                document.getElementById('lobbyBtn').disabled = true;
-                document.getElementById('gameBtn').disabled = true;
-                document.getElementById('profileBtn').disabled = true;
             }
         }
 
