@@ -30,6 +30,40 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             animation: pulse 2s infinite;
         }
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 1rem;
+        }
+        .auth-button {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .auth-button.logout {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
         .nav-buttons {
             display: flex;
             justify-content: center;
@@ -55,6 +89,10 @@
         .nav-button.active {
             background: linear-gradient(45deg, #4caf50, #45a049);
         }
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .section {
             background: rgba(255,255,255,0.1);
             border-radius: 15px;
@@ -68,20 +106,27 @@
             display: block;
             animation: slideIn 0.5s ease-out;
         }
-        .player-input {
-            text-align: center;
-            margin: 2rem 0;
+        .auth-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin: 1.5rem 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
         }
         .input-field {
             width: 100%;
-            max-width: 300px;
             padding: 15px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             border: 2px solid #ddd;
             border-radius: 8px;
-            margin: 10px 0;
             background: rgba(255,255,255,0.9);
             color: #333;
+            box-sizing: border-box;
         }
         .input-field:focus {
             outline: none;
@@ -99,6 +144,7 @@
             margin: 10px;
             transition: all 0.3s ease;
             font-weight: bold;
+            width: 100%;
         }
         .game-button:hover {
             transform: translateY(-2px);
@@ -209,6 +255,33 @@
         .rank-1 { background: linear-gradient(45deg, #ffd700, #ffed4e); }
         .rank-2 { background: linear-gradient(45deg, #c0c0c0, #e8e8e8); }
         .rank-3 { background: linear-gradient(45deg, #cd7f32, #e4a853); }
+        .profile-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-item {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4caf50;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -226,32 +299,134 @@
     <div class="container">
         <div class="header">
             <h1>🎮 TouchNwin87 🎮</h1>
+            
+            <!-- Authentication UI -->
+            <div id="authButtons" class="auth-buttons">
+                <button class="auth-button" onclick="showSection('login')">🔐 Login</button>
+                <button class="auth-button" onclick="showSection('register')">📝 Register</button>
+            </div>
+            
+            <div id="userInfo" class="user-info" style="display: none;">
+                <span id="displayUsername">Player</span>
+                <button class="auth-button logout" onclick="logout()">🚪 Logout</button>
+            </div>
+            
             <div class="nav-buttons">
                 <button class="nav-button active" onclick="showSection('home')">🏠 Home</button>
-                <button class="nav-button" onclick="showSection('lobby')">🏠 Game Lobby</button>
-                <button class="nav-button" onclick="showSection('game')">🎮 Play Game</button>
+                <button class="nav-button" onclick="showSection('lobby')" id="lobbyBtn" disabled>🏠 Game Lobby</button>
+                <button class="nav-button" onclick="showSection('game')" id="gameBtn" disabled>🎮 Play Game</button>
                 <button class="nav-button" onclick="showSection('leaderboard')">🏆 Leaderboard</button>
+                <button class="nav-button" onclick="showSection('profile')" id="profileBtn" disabled>👤 Profile</button>
             </div>
         </div>
 
         <!-- Home Section -->
         <div id="home" class="section active">
             <h2>🌍 Welcome to TouchNwin87 Gaming Platform</h2>
-            <div class="player-input">
-                <h3>👤 Enter Your Gaming Name</h3>
-                <input type="text" id="playerName" class="input-field" placeholder="Enter your name..." maxlength="20">
-                <br>
-                <button class="game-button" onclick="setPlayerName()">✅ Start Playing</button>
+            <div id="guestContent">
+                <h3>🔐 Please Login or Register to Play</h3>
+                <p>Join our gaming community and compete with players worldwide!</p>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button class="game-button" onclick="showSection('login')">🔐 Login</button>
+                    <button class="game-button" onclick="showSection('register')">📝 Register</button>
+                </div>
+            </div>
+            
+            <div id="userContent" style="display: none;">
+                <h3>🎮 Welcome back, <span id="welcomeUser">Player</span>!</h3>
+                <p>Ready to dominate the leaderboards?</p>
             </div>
             
             <h3>🎯 Platform Features</h3>
             <ul style="text-align: left; max-width: 500px; margin: 0 auto;">
+                <li>🔐 Secure user authentication</li>
                 <li>🎮 Real-time multiplayer gaming</li>
                 <li>🏆 Global leaderboard system</li>
                 <li>🏠 Interactive game lobby</li>
+                <li>👤 Personal player profiles</li>
                 <li>⚡ Fast-paced gameplay</li>
                 <li>📱 Mobile-friendly design</li>
             </ul>
+        </div>
+
+        <!-- Login Section -->
+        <div id="login" class="section">
+            <h2>🔐 Login to Your Account</h2>
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="loginUsername">👤 Username</label>
+                    <input type="text" id="loginUsername" class="input-field" placeholder="Enter your username" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">🔒 Password</label>
+                    <input type="password" id="loginPassword" class="input-field" placeholder="Enter your password">
+                </div>
+                <button class="game-button" onclick="login()">🔐 Login</button>
+                <p style="text-align: center; margin-top: 1rem;">
+                    Don't have an account? <a href="#" onclick="showSection('register')" style="color: #ff6b6b;">Register here</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Register Section -->
+        <div id="register" class="section">
+            <h2>📝 Create New Account</h2>
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="registerUsername">👤 Username</label>
+                    <input type="text" id="registerUsername" class="input-field" placeholder="Choose a username" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">📧 Email</label>
+                    <input type="email" id="registerEmail" class="input-field" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">🔒 Password</label>
+                    <input type="password" id="registerPassword" class="input-field" placeholder="Create a password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">🔒 Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm your password">
+                </div>
+                <button class="game-button" onclick="register()">📝 Register</button>
+                <p style="text-align: center; margin-top: 1rem;">
+                    Already have an account? <a href="#" onclick="showSection('login')" style="color: #ff6b6b;">Login here</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile" class="section">
+            <h2>👤 Player Profile</h2>
+            <div class="profile-info">
+                <h3>🎮 <span id="profileUsername">Player</span></h3>
+                <p>📧 <span id="profileEmail">email@example.com</span></p>
+                <p>📅 Joined: <span id="joinDate">Today</span></p>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalScore">0</div>
+                        <div class="stat-label">Total Score</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="gamesPlayed">0</div>
+                        <div class="stat-label">Games Played</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="winRate">0%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="globalRank">#0</div>
+                        <div class="stat-label">Global Rank</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="game-button" onclick="showSection('lobby')">🎮 Play Now</button>
+                    <button class="game-button" onclick="showSection('leaderboard')">🏆 View Rankings</button>
+                </div>
+            </div>
         </div>
 
         <!-- Game Lobby Section -->
@@ -416,11 +591,15 @@
     </div>
 
     <script>
-        let currentPlayerName = '';
+        let currentUser = null;
         let currentScore = 0;
         let gameTimer = 30;
         let gameInterval = null;
         let timerInterval = null;
+
+        // User management
+        const users = JSON.parse(localStorage.getItem('touchNwinUsers')) || [];
+        let userStats = JSON.parse(localStorage.getItem('touchNwinStats')) || {};
 
         // Navigation
         function showSection(sectionId) {
@@ -438,30 +617,156 @@
             document.getElementById(sectionId).classList.add('active');
             
             // Add active class to clicked button
-            event.target.classList.add('active');
+            if (event && event.target.classList.contains('nav-button')) {
+                event.target.classList.add('active');
+            }
         }
 
-        // Player name input
-        function setPlayerName() {
-            const nameInput = document.getElementById('playerName');
-            const name = nameInput.value.trim();
+        // Authentication functions
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
             
-            if (!name) {
-                alert('👤 Please enter your gaming name!');
+            if (!username || !password) {
+                alert('🔐 Please enter both username and password!');
                 return;
             }
             
-            currentPlayerName = name;
-            document.getElementById('currentPlayer').textContent = name;
-            alert(`🎮 Welcome ${name}! Ready to play!`);
-            showSection('lobby');
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                updateAuthUI();
+                alert(`🎮 Welcome back, ${username}!`);
+                showSection('home');
+            } else {
+                alert('🔐 Invalid username or password!');
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!username || !email || !password || !confirmPassword) {
+                alert('📝 Please fill in all fields!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('📝 Password must be at least 6 characters!');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('📝 Passwords do not match!');
+                return;
+            }
+            
+            if (users.find(u => u.username === username)) {
+                alert('📝 Username already exists!');
+                return;
+            }
+            
+            const newUser = {
+                username,
+                email,
+                password,
+                joinDate: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('touchNwinUsers', JSON.stringify(users));
+            
+            // Initialize user stats
+            userStats[username] = {
+                totalScore: 0,
+                gamesPlayed: 0,
+                wins: 0,
+                losses: 0
+            };
+            localStorage.setItem('touchNwinStats', JSON.stringify(userStats));
+            
+            alert(`📝 Account created successfully! Welcome, ${username}!`);
+            
+            // Clear form
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            
+            showSection('login');
+        }
+
+        function logout() {
+            currentUser = null;
+            updateAuthUI();
+            alert('🚪 Logged out successfully!');
+            showSection('home');
+        }
+
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const guestContent = document.getElementById('guestContent');
+            const userContent = document.getElementById('userContent');
+            
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'block';
+                guestContent.style.display = 'none';
+                userContent.style.display = 'block';
+                document.getElementById('displayUsername').textContent = currentUser.username;
+                document.getElementById('welcomeUser').textContent = currentUser.username;
+                
+                // Enable navigation buttons
+                document.getElementById('lobbyBtn').disabled = false;
+                document.getElementById('gameBtn').disabled = false;
+                document.getElementById('profileBtn').disabled = false;
+                
+                // Update profile
+                updateProfile();
+            } else {
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+                guestContent.style.display = 'block';
+                userContent.style.display = 'none';
+                
+                // Disable navigation buttons
+                document.getElementById('lobbyBtn').disabled = true;
+                document.getElementById('gameBtn').disabled = true;
+                document.getElementById('profileBtn').disabled = true;
+            }
+        }
+
+        function updateProfile() {
+            if (!currentUser) return;
+            
+            const stats = userStats[currentUser.username] || {};
+            document.getElementById('profileUsername').textContent = currentUser.username;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('joinDate').textContent = new Date(currentUser.joinDate).toLocaleDateString();
+            document.getElementById('totalScore').textContent = stats.totalScore || 0;
+            document.getElementById('gamesPlayed').textContent = stats.gamesPlayed || 0;
+            
+            const winRate = stats.gamesPlayed > 0 ? ((stats.wins / stats.gamesPlayed) * 100).toFixed(1) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+            
+            // Calculate global rank (simplified)
+            const allUsers = Object.keys(userStats).sort((a, b) => 
+                (userStats[b].totalScore || 0) - (userStats[a].totalScore || 0)
+            );
+            const rank = allUsers.indexOf(currentUser.username) + 1;
+            document.getElementById('globalRank').textContent = '#' + rank;
         }
 
         // Game lobby functions
         function joinRoom(roomId) {
-            if (!currentPlayerName) {
-                alert('👤 Please enter your name first!');
-                showSection('home');
+            if (!currentUser) {
+                alert('🔐 Please login first!');
+                showSection('login');
                 return;
             }
             
@@ -470,9 +775,9 @@
         }
 
         function createRoom() {
-            if (!currentPlayerName) {
-                alert('👤 Please enter your name first!');
-                showSection('home');
+            if (!currentUser) {
+                alert('🔐 Please login first!');
+                showSection('login');
                 return;
             }
             
@@ -519,6 +824,7 @@
         function updateScore() {
             document.getElementById('currentScore').textContent = currentScore;
             document.getElementById('playerScore').textContent = currentScore;
+            document.getElementById('currentPlayer').textContent = currentUser ? currentUser.username : 'Player87';
         }
 
         function updateTimer() {
@@ -529,7 +835,22 @@
             clearInterval(gameInterval);
             gameInterval = null;
             
-            alert(`🏆 Game Over!\n\n🎯 Final Score: ${currentScore}\n🏆 Great job, ${currentPlayerName}!`);
+            // Update user stats
+            if (currentUser) {
+                const stats = userStats[currentUser.username] || {};
+                stats.totalScore = (stats.totalScore || 0) + currentScore;
+                stats.gamesPlayed = (stats.gamesPlayed || 0) + 1;
+                // Simplified win condition
+                if (currentScore > 100) {
+                    stats.wins = (stats.wins || 0) + 1;
+                } else {
+                    stats.losses = (stats.losses || 0) + 1;
+                }
+                localStorage.setItem('touchNwinStats', JSON.stringify(userStats));
+                updateProfile();
+            }
+            
+            alert(`🏆 Game Over!\n\n🎯 Final Score: ${currentScore}\n🏆 Great job, ${currentUser ? currentUser.username : 'Player'}!`);
             
             // Reset for new game
             currentScore = 0;
@@ -551,15 +872,19 @@
         // Keyboard support
         document.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                const nameInput = document.getElementById('playerName');
-                if (nameInput === document.activeElement) {
-                    setPlayerName();
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'loginUsername' || activeElement.id === 'loginPassword') {
+                    login();
+                } else if (activeElement.id === 'registerUsername' || activeElement.id === 'registerEmail' || 
+                          activeElement.id === 'registerPassword' || activeElement.id === 'confirmPassword') {
+                    register();
                 }
             }
         });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
             console.log('🎮 TouchNwin87 Gaming Platform Loaded');
             console.log('🚀 All systems ready for multiplayer action!');
         });
