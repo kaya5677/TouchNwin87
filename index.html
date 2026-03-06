@@ -18,6 +18,54 @@
             padding: 1rem;
         }
         
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        .main-logo {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: logoPulse 3s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .main-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: logoShimmer 4s infinite;
+        }
+        .logo-text {
+            position: relative;
+            z-index: 2;
+        }
+        .platform-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
         /* Task Bar */
         .taskbar {
             position: fixed;
@@ -68,14 +116,14 @@
         
         .header {
             text-align: center;
-            padding: 2rem 0;
+            padding: 1rem 0;
             background: rgba(0,0,0,0.3);
             border-radius: 15px;
             margin-bottom: 2rem;
             margin-bottom: 80px;
         }
         h1 {
-            font-size: 3rem;
+            font-size: 2rem;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             animation: pulse 2s infinite;
@@ -409,14 +457,30 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @keyframes logoPulse {
+            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        }
+        @keyframes logoShimmer {
+            0% { transform: rotate(0deg) translateX(-100px); }
+            100% { transform: rotate(360deg) translateX(-100px); }
+        }
         .pulse { animation: pulse 2s infinite; }
         .slide-in { animation: slideIn 0.5s ease-out; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-container">
+            <div class="main-logo">
+                <span class="logo-text">87</span>
+            </div>
+            <div class="platform-name">TouchNwin</div>
+        </div>
+        
         <div class="header">
-            <h1>🎮 TouchNwin87 🎮</h1>
+            <h1>🎮 Gaming Platform</h1>
             
             <!-- Authentication UI -->
             <div id="authButtons" class="auth-buttons">
@@ -504,7 +568,7 @@
                     <div>
                         <h4>🎯 Touch & Win</h4>
                         <p>Room: room-abc123</p>
-                        <p>Date: March 6, 2026</p>
+                        <p>Date: March 7, 2026</p>
                     </div>
                     <div style="text-align: right;">
                         <p style="font-size: 1.5rem; color: #4caf50;">250 points</p>
@@ -515,7 +579,7 @@
                     <div>
                         <h4>⚡ Speed Challenge</h4>
                         <p>Room: room-def456</p>
-                        <p>Date: March 5, 2026</p>
+                        <p>Date: March 6, 2026</p>
                     </div>
                     <div style="text-align: right;">
                         <p style="font-size: 1.5rem; color: #ffc107;">180 points</p>
@@ -526,7 +590,7 @@
                     <div>
                         <h4>🎯 Touch & Win</h4>
                         <p>Room: room-ghi789</p>
-                        <p>Date: March 4, 2026</p>
+                        <p>Date: March 5, 2026</p>
                     </div>
                     <div style="text-align: right;">
                         <p style="font-size: 1.5rem; color: #ff6b6b;">95 points</p>
@@ -537,7 +601,7 @@
                     <div>
                         <h4>⚡ Speed Challenge</h4>
                         <p>Room: room-jkl012</p>
-                        <p>Date: March 3, 2026</p>
+                        <p>Date: March 4, 2026</p>
                     </div>
                     <div style="text-align: right;">
                         <p style="font-size: 1.5rem; color: #666;">45 points</p>
@@ -566,7 +630,7 @@
                 <div class="promo-card">
                     <h3>🏆 Tournament Prize</h3>
                     <p style="font-size: 1.5rem; margin: 1rem 0;">10,000 Points!</p>
-                    <p>Win our weekly tournament and claim the grand prize of 10,000 points!</p>
+                    <p>Win our weekly tournament and claim grand prize of 10,000 points!</p>
                     <button class="game-button" style="margin-top: 1rem;">Join Tournament</button>
                 </div>
                 <div class="promo-card">
